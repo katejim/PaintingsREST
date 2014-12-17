@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12">
+            <table border="1">
+                {% for pict in pictures %}
+                    <tr>
+                        <td>{{ pict.type }}</td>
+                        <td>
+                            <img class="autoResizeImage" title="{{ pict.name }}" src="{% static "img" %}/{{ pict.link }}" class="poster-img"/>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock body %}
