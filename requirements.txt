@@ -1,0 +1,3 @@
+Python 3.4
+Django 1.7.1
+djangorestframework 3.0.1
