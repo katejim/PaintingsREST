@@ -7,16 +7,14 @@
             <table>
                 {% for pict in pictures %}
 
+                    <tr> <td> NAME: {{ pict.name }} </td> </tr>
                     <tr>
-                        <td> NAME: {{ pict.name }} </td>
-                        <td> TYPE: {{ pict.type }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
+                        <td>
                             <img class="autoResizeImage" title="{{ pict.name }}"
                                  src="{% static "img" %}/{{ pict.link }}" class="poster-img"/>
                         </td>
                     </tr>
+
                 {% endfor %}
             </table>
         </div>

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12">
+            <table>
+                <ul>
+                    {% for key, value in tasks.items %}
+                        <li>{{ key }}
+                            <ul>
+                                {% for key_v, value_v in value.items %}
+                                    <li>{{ key_v }} - {{ value_v }}</li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </table>
+        </div>
+    </div>
+{% endblock body %}

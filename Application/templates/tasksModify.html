@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12">
+            <p> TASK with ID: {{ id }} & DESCRIPTION
+                NAME: {{ name }} TYPE: {{ type }}
+                <img class="autoResizeImage" title="{{ name }}"
+                                 src="{% static "img" %}/{{ link }}" class="poster-img"/>
+                was {{ action }}
+            </p>
+        </div>
+    </div>
+{% endblock body %}
