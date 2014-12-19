@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -21,11 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'e9ij5pxv2=*(bj)uf*&yc%+y@3l8_yd)xrgh1=+tbid)!=m^f8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-TEMPLATE_DEBUG = False
+TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['.herokuapp.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -54,7 +53,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.XMLRenderer',
         'rest_framework.renderers.TemplateHTMLRenderer',
-        # 'Application.Paintings.views.PlainTextRenderer',
+        #'Application.Paintings.views.PlainTextRenderer',
     )
 }
 
@@ -104,13 +103,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'static/'),
-# )
-
-if DEBUG:
-    STATICFILES_DIRS = (os.path.join(BASE_DIR, '/static/'),)
-else:
-    STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'static/'),
-    )
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static/'),
+)
