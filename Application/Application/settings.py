@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -53,7 +54,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.XMLRenderer',
         'rest_framework.renderers.TemplateHTMLRenderer',
-        #'Application.Paintings.views.PlainTextRenderer',
+        # 'Application.Paintings.views.PlainTextRenderer',
     )
 }
 
@@ -106,3 +107,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static/'),
 )
+
+if DEBUG:
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, '/static/'),)
+else:
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'static/'),
+    )
