@@ -19,4 +19,5 @@ urlpatterns = patterns('',
                        url(r'^tasks/(?P<taskID>\d+)/$', views.TasksDELETEViewSet),
                        url(r'^tasks/$', views.AllTasksViewSet),
                        url(r'^admin/', include(admin.site.urls)),
+                       url(r'.*', views.page_not_found_view),
 )

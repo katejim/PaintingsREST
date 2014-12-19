@@ -1,3 +1,4 @@
+import string
 from django.core.context_processors import request
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, JSONPRenderer, XMLRenderer, TemplateHTMLRenderer
@@ -8,14 +9,22 @@ from rest_framework import renderers
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.shortcuts import get_list_or_404
+from django.shortcuts import Http404
+
+
+from rest_framework import renderers
+
 
 class PlainTextRenderer(renderers.BaseRenderer):
     media_type = 'text/plain'
     format = 'txt'
 
     def render(self, data, media_type=None, renderer_context=None):
-        print(type(data))
-        return data
+        rez = ""
+        for el in data:
+            rez += "id: " + str(el['id']) + " name: " + el['name'] + " link: " + el['link'] + " type:" + el['type'] + "\n"
+
+        return rez
 
 
 @api_view(['GET'])
@@ -80,6 +89,10 @@ def TasksDELETEViewSet(request, taskID, format=None):
     return Response(queryset)
 
 @api_view(['GET'])
-@renderer_classes((TemplateHTMLRenderer,))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer, JSONPRenderer, XMLRenderer, PlainTextRenderer))
 def AllTasksViewSet(request, format=None):
     return Response({'tasks': tasks}, template_name='tasks.html')
+
+
+def page_not_found_view(request):
+    raise Http404
