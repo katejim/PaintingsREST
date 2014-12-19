@@ -66,6 +66,8 @@ def TasksPUTViewSet(request, stringType, stringName, format=None):
 def TasksPOSTViewSet(request, taskID, stringType, stringName, format=None):
     queryset = tasks.get(int('0' + taskID))
     if queryset == None:
+        if request.accepted_renderer.format == 'html':
+            return Response(status=status.HTTP_400_BAD_REQUEST, template_name='tasksModify.html')
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     queryset['name'] = stringName
@@ -80,6 +82,8 @@ def TasksPOSTViewSet(request, taskID, stringType, stringName, format=None):
 def TasksDELETEViewSet(request, taskID, format=None):
     queryset = tasks.get(int('0' + taskID))
     if queryset == None:
+        if request.accepted_renderer.format == 'html':
+            return Response(status=status.HTTP_400_BAD_REQUEST, template_name='tasksModify.html')
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     del tasks[int('0' + taskID)]
