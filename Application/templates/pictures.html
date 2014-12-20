@@ -9,10 +9,11 @@
 
                     <tr>
                         <td> NAME: {{ pict.name }} </td>
-                        <td> TYPE: {{ pict.type }}</td>
+                        <td> TYPE: {{ pict.type }} </td>
+                        <td> PRICE: {{ pict.price }} </td>
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td colspan="3">
                             <img class="autoResizeImage" title="{{ pict.name }}"
                                  src="{% static "img" %}/{{ pict.link }}" class="poster-img"/>
                         </td>

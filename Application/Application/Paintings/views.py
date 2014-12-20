@@ -50,32 +50,35 @@ def PicturesTypedViewSet(request, stringType, format=None):
 tasks = {}
 @api_view(['PUT'])
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer, JSONPRenderer, XMLRenderer, PlainTextRenderer))
-def TasksPUTViewSet(request, stringType, stringName, format=None):
-    queryset = get_object_or_404(Pictures.objects.filter(type=stringType), name=stringName)
-    serializer = AllPicturesSerializer(queryset, data=request.data)
+def TasksPUTViewSet(request, stringType, priceValue, format=None):
+    queryset = get_list_or_404(Pictures.objects.filter(type=stringType).filter(price__gte=priceValue))
+    serializer = AllPicturesSerializer(queryset, data=request.data, many=True)
     if serializer.is_valid():
         tasks[len(tasks)] = serializer.data
         if request.accepted_renderer.format == 'html':
-            return Response({'id': len(tasks)-1, 'name': serializer.data['name'], 'type':serializer.data['type'],
-                         'link':serializer.data['link'], 'action': 'added'}, template_name='tasksModify.html')
+            return Response({'id': len(tasks)-1, 'price': priceValue, 'type': stringType, 'action': 'added'}, template_name='tasksModify.html')
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer, JSONPRenderer, XMLRenderer, PlainTextRenderer))
-def TasksPOSTViewSet(request, taskID, stringType, stringName, format=None):
+def TasksPOSTViewSet(request, taskID, stringType, priceValue, format=None):
+    # check existence of task
     queryset = tasks.get(int('0' + taskID))
     if queryset == None:
         if request.accepted_renderer.format == 'html':
             return Response(status=status.HTTP_400_BAD_REQUEST, template_name='tasksModify.html')
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    queryset['name'] = stringName
-    queryset['type'] = stringType
-    if request.accepted_renderer.format == 'html':
-        return Response({'id': taskID, 'name':queryset['name'], 'type':queryset['type'],
-                         'link':queryset['link'], 'action': 'updated'}, template_name='tasksModify.html')
-    return Response(queryset)
+    queryset = get_list_or_404(Pictures.objects.filter(type=stringType).filter(price__gte=priceValue))
+    serializer = AllPicturesSerializer(queryset, data=request.data, many=True)
+    if serializer.is_valid():
+        tasks[int('0' + taskID)] = serializer.data
+        if request.accepted_renderer.format == 'html':
+            return Response({'id': taskID, 'price': priceValue, 'type': stringType, 'action': 'updated'}, template_name='tasksModify.html')
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['DELETE'])
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer, JSONPRenderer, XMLRenderer, PlainTextRenderer))
@@ -88,8 +91,7 @@ def TasksDELETEViewSet(request, taskID, format=None):
 
     del tasks[int('0' + taskID)]
     if request.accepted_renderer.format == 'html':
-        return Response({'id': taskID, 'name':queryset['name'], 'type':queryset['type'],
-                         'link':queryset['link'], 'action': 'deleted'}, template_name='tasksModify.html')
+        return Response({'id': taskID}, template_name='tasksDelete.html')
     return Response(queryset)
 
 @api_view(['GET'])

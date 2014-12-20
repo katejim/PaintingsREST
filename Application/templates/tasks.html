@@ -4,19 +4,33 @@
 {% block body %}
     <div class="row">
         <div class="col-xs-12">
-            <table>
-                <ul>
+            <ul>
+                <table>
                     {% for key, value in tasks.items %}
-                        <li>{{ key }}
+                        <li>ID = {{ key }}
                             <ul>
-                                {% for key_v, value_v in value.items %}
-                                    <li>{{ key_v }} - {{ value_v }}</li>
-                                {% endfor %}
+                                <li>
+                                    <table>
+                                        {% for pict in value %}
+                                            <tr>
+                                                <td> NAME: {{ pict.name }} </td>
+                                                <td> TYPE: {{ pict.type }} </td>
+                                                <td> PRICE: {{ pict.price }} </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3">
+                                                    <img class="autoResizeImage" title="{{ pict.name }}"
+                                                         src="{% static "img" %}/{{ pict.link }}" class="poster-img"/>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </li>
                             </ul>
                         </li>
                     {% endfor %}
-                </ul>
-            </table>
+                </table>
+            </ul>
         </div>
     </div>
 {% endblock body %}

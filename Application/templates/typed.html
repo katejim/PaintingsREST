@@ -7,9 +7,9 @@
             <table>
                 {% for pict in pictures %}
 
-                    <tr> <td> NAME: {{ pict.name }} </td> </tr>
+                    <tr> <td> NAME: {{ pict.name }} </td> <td> PRICE: {{ pict.price }} </td></tr>
                     <tr>
-                        <td>
+                        <td colspan="2">
                             <img class="autoResizeImage" title="{{ pict.name }}"
                                  src="{% static "img" %}/{{ pict.link }}" class="poster-img"/>
                         </td>

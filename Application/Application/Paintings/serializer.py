@@ -6,4 +6,4 @@ from rest_framework import serializers
 class AllPicturesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pictures
-        fields = ('id', 'name', 'link', 'type')
+        fields = ('id', 'name', 'link', 'type', 'price')
