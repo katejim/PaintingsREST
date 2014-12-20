@@ -1,3 +1,4 @@
 .idea/
 .edjango
 *.pyc
+*.DS_Store
