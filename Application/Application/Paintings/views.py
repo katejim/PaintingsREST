@@ -11,7 +11,6 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import get_list_or_404
 from django.shortcuts import Http404
 
-
 from rest_framework import renderers
 
 
@@ -22,7 +21,8 @@ class PlainTextRenderer(renderers.BaseRenderer):
     def render(self, data, media_type=None, renderer_context=None):
         rez = ""
         for el in data:
-            rez += "id: " + str(el['id']) + " name: " + el['name'] + " link: " + el['link'] + " type:" + el['type'] + "\n"
+            rez += "id: " + str(el['id']) + " name: " + el['name'] + " link: " + el['link'] + " type:" + el[
+                'type'] + "\n"
 
         return rez
 
@@ -48,6 +48,8 @@ def PicturesTypedViewSet(request, stringType, format=None):
 
 
 tasks = {}
+
+
 @api_view(['PUT'])
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer, JSONPRenderer, XMLRenderer, PlainTextRenderer))
 def TasksPUTViewSet(request, stringType, priceValue, format=None):
@@ -56,9 +58,11 @@ def TasksPUTViewSet(request, stringType, priceValue, format=None):
     if serializer.is_valid():
         tasks[len(tasks)] = serializer.data
         if request.accepted_renderer.format == 'html':
-            return Response({'id': len(tasks)-1, 'price': priceValue, 'type': stringType, 'action': 'added'}, template_name='tasksModify.html')
+            return Response({'id': len(tasks) - 1, 'price': priceValue, 'type': stringType, 'action': 'added'},
+                            template_name='tasksModify.html')
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer, JSONPRenderer, XMLRenderer, PlainTextRenderer))
@@ -75,7 +79,8 @@ def TasksPOSTViewSet(request, taskID, stringType, priceValue, format=None):
     if serializer.is_valid():
         tasks[int('0' + taskID)] = serializer.data
         if request.accepted_renderer.format == 'html':
-            return Response({'id': taskID, 'price': priceValue, 'type': stringType, 'action': 'updated'}, template_name='tasksModify.html')
+            return Response({'id': taskID, 'price': priceValue, 'type': stringType, 'action': 'updated'},
+                            template_name='tasksModify.html')
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -93,6 +98,7 @@ def TasksDELETEViewSet(request, taskID, format=None):
     if request.accepted_renderer.format == 'html':
         return Response({'id': taskID}, template_name='tasksDelete.html')
     return Response(queryset)
+
 
 @api_view(['GET'])
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer, JSONPRenderer, XMLRenderer, PlainTextRenderer))
