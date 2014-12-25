@@ -10,6 +10,9 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.shortcuts import get_list_or_404
 from django.shortcuts import Http404
+from django.template.defaulttags import csrf_token
+
+
 
 from rest_framework import renderers
 
@@ -53,6 +56,14 @@ tasks = {}
 @api_view(['PUT'])
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer, JSONPRenderer, XMLRenderer, PlainTextRenderer))
 def TasksPUTViewSet(request, stringType, priceValue, format=None):
+    print(stringType)
+    print(type(priceValue), priceValue)
+    if not isinstance(priceValue, int):
+        print("here")
+        if request.accepted_renderer.format == 'html':
+            return Response(status=status.HTTP_400_BAD_REQUEST, template_name='tasksModify.html')
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
     queryset = get_list_or_404(Pictures.objects.filter(type=stringType).filter(price__gte=priceValue))
     serializer = AllPicturesSerializer(queryset, data=request.data, many=True)
     if serializer.is_valid():
@@ -67,9 +78,9 @@ def TasksPUTViewSet(request, stringType, priceValue, format=None):
 @api_view(['POST'])
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer, JSONPRenderer, XMLRenderer, PlainTextRenderer))
 def TasksPOSTViewSet(request, taskID, stringType, priceValue, format=None):
-    # check existence of task
+
     queryset = tasks.get(int('0' + taskID))
-    if queryset == None:
+    if queryset == None or not isinstance(priceValue, int) or not isinstance(taskID, int):
         if request.accepted_renderer.format == 'html':
             return Response(status=status.HTTP_400_BAD_REQUEST, template_name='tasksModify.html')
         return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -77,6 +88,7 @@ def TasksPOSTViewSet(request, taskID, stringType, priceValue, format=None):
     queryset = get_list_or_404(Pictures.objects.filter(type=stringType).filter(price__gte=priceValue))
     serializer = AllPicturesSerializer(queryset, data=request.data, many=True)
     if serializer.is_valid():
+        print(taskID)
         tasks[int('0' + taskID)] = serializer.data
         if request.accepted_renderer.format == 'html':
             return Response({'id': taskID, 'price': priceValue, 'type': stringType, 'action': 'updated'},
@@ -89,7 +101,7 @@ def TasksPOSTViewSet(request, taskID, stringType, priceValue, format=None):
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer, JSONPRenderer, XMLRenderer, PlainTextRenderer))
 def TasksDELETEViewSet(request, taskID, format=None):
     queryset = tasks.get(int('0' + taskID))
-    if queryset == None:
+    if queryset == None or not isinstance(taskID, int):
         if request.accepted_renderer.format == 'html':
             return Response(status=status.HTTP_400_BAD_REQUEST, template_name='tasksModify.html')
         return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -105,6 +117,6 @@ def TasksDELETEViewSet(request, taskID, format=None):
 def AllTasksViewSet(request, format=None):
     return Response({'tasks': tasks}, template_name='tasks.html')
 
-
+@api_view(['GET', 'PUT', 'POST', 'DELETE'])
 def page_not_found_view(request):
     raise Http404
